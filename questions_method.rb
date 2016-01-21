@@ -1,14 +1,32 @@
 # @clear_screen = "\e[H\e[2J"
 
-@q_and_a = {
-	'What is your name?' => 'sam',
-	'What is your quest?' => 'to seek the grail',
-	'What is your favorite color?' => 'green!',
-	'What is the name of Arthur\'s sword?' => 'excalibur',
-	'What is the airspeed velocity of a swallow?' => 'that depends, is the swallow african or european?'
-}
-
+@q_and_a = Hash.new
 @score = 0
+
+def populate_hash
+	puts "Please specify how many questions you would like to add."
+	length = gets.chomp.to_i
+	n = 1
+	if length == 0
+		puts "You can't have a quiz without any questions!"
+		populate_hash
+	else
+		length.times do
+			print "Question #{n}: "
+			question = gets.chomp.capitalize
+			if !question.include?"?"
+				puts "That's not a question! Let's try again..."
+				redo
+			end
+			print "Answer for Question #{n}: "
+			answer = gets.chomp.downcase
+			@q_and_a[question] = answer
+			n += 1
+		end
+		puts "Now let's run through your quiz!"
+		gets
+	end
+end
 
 def get_answer(question)
 	puts question
@@ -62,4 +80,5 @@ def main
 	eval_score(@score, @q_and_a)
 end
 
+populate_hash
 quiz_time!
